@@ -13,6 +13,14 @@ const selecoes = [
     {id: 4, selecao: 'Camarões', grupo: 'G'},
 ]
 
+function buscarSelecaoPorId(id) {
+    return selecoes.filter(selecao => selecao.id == id)
+}
+
+function buscarIndexSeleceao(id) {
+    return selecoes.findIndex(selecao => selecao.id == id)
+}
+
 // Criando a rota padrão
 app.get('/', (req, res) => {
     res.send('Curso de Node JS')
@@ -22,9 +30,19 @@ app.get('/selecoes', (req, res) => {
     res.status(200).send(selecoes)
 })
 
+app.get('/selecoes/:id', (req, res) => {
+    res.json(buscarSelecaoPorId(req.params.id))
+})
+
 app.post('/selecoes', (req, res) => {
     selecoes.push(req.body)
-    res.status(201).send('Seleção cadastrada com sucesso!')
+    res.status(201).send('Seleção Cadastrada com Sucesso!')
+})
+
+app.delete('/selecoes/:id', (req, res) => {
+    let index = buscarIndexSeleceao(req.params.id)
+    selecoes.splice(index, 1)
+    res.send(`Seleção com ID ${req.params.id} Excluída com Sucesso!`)
 })
 
 export default app
